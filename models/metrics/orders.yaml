@@ -1,18 +1,17 @@
 semantic_models:
   #The name of the semantic model.
   - name: orders
-    description: |
-      Model containting order data. The grain of the table is the order id.
+    description: "Model containting order data. The grain of the table is the order id."
     
     #The name of the dbt model and schema
-    model: ref('orders')
+    model: ref('fct_orders')
     defaults:
       agg_time_dimension: ds
     #Entities. These usually corespond to keys in the table.
     entities:
-      - name: order
+      - name: ???
         type: primary
-        expr: order_id
+        expr: ???
       - name: location
         type: foreign
         expr: location_id
@@ -24,7 +23,7 @@ semantic_models:
     measures:
       - name: order_total
         agg: sum
-        create_metric: True
+        create_metric: true
         agg_time_dimension: ds
       - name: food_orders
         expr: case when is_food_order then order_total else 0 end
@@ -77,8 +76,8 @@ semantic_models:
         agg: percentile
         agg_params:
           percentile: 0.99
-          use_discrete_percentile: True
-          use_approximate_percentile: False
+          use_discrete_percentile: true
+          use_approximate_percentile: false
         create_metric: true
         agg_time_dimension: ds
   #Dimensions. Either categorical or time. These add additonal context to metrics. The typical querying pattern is Metric by Dimension.

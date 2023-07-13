@@ -8,7 +8,7 @@ semantic_models:
       Customer dimension table. The grain of the table is one row per customer.
 
     #The name of the dbt model and schema
-    model: ref('customers')
+    model: ref('dim_customers')
     #Entities. These usually corespond to keys in the table.
     entities:
       - name: customer

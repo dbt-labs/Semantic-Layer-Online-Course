@@ -1,7 +1,7 @@
 version: 2
 
 models:
-  - name: customers
+  - name: dim_customers
     description: Customer overview data mart, offering key details for each unique customer. One row per customer.
     columns:
       - name: customer_id
@@ -27,7 +27,7 @@ models:
           - accepted_values:
               values: ["new", "returning"]
 
-  - name: orders
+  - name: fct_orders
     description: Order overview data mart, offering key details for each order inlcluding if it's a customer's first order and a food vs. drink item breakdown. One row per order.
     tests:
       - dbt_utils.expression_is_true:
