@@ -1,67 +1,53 @@
 semantic_models:
-  #The name of the semantic model.
   - name: orders
-    description: "Model containting order data. The grain of the table is the order id."
-    
-    #The name of the dbt model and schema
-    model: ref('fct_orders')
     defaults:
-      agg_time_dimension: ds
-    #Entities. These usually corespond to keys in the table.
+      agg_time_dimension: ordered_at
+    description: |
+      Order fact table. This table is at the order grain with one row per order.
+    model: ref('fct_orders')
     entities:
-      - name: ???
+      - name: order_id
         type: primary
-        expr: ???
       - name: location
         type: foreign
         expr: location_id
       - name: customer
         type: foreign
         expr: customer_id
-
-    #Measures. These are the aggregations on the columns in the table.
+    dimensions:
+      - name: ordered_at
+        expr: date_trunc('day', ordered_at)
+        type: time
+        type_params:
+          time_granularity: day
+      - name: order_total_dim
+        type: categorical
+        expr: order_total
+      - name: is_food_order
+        type: categorical
+      - name: is_drink_order
+        type: categorical
     measures:
       - name: order_total
+        description: The total amount for each order including taxes.
         agg: sum
-        create_metric: true
-        agg_time_dimension: ds
-      - name: food_orders
-        expr: case when is_food_order then order_total else 0 end
+      - name: order_count
+        expr: 1
         agg: sum
-        agg_time_dimension: ds
-      - name: orders
-        expr: "1"
+      - name: tax_paid
+        description: The total tax paid on each order.
         agg: sum
-        agg_time_dimension: ds
-      - name: max_order_value
-        expr: order_total
-        agg: max
-        agg_time_dimension: ds
-      - name: min_order_value
-        expr: order_total
-        agg: min
-        agg_time_dimension: ds
-      - name: customers
-        expr: customer_id
+      - name: customers_with_orders
+        description: Distinct count of customers placing orders
         agg: count_distinct
-        agg_time_dimension: ds
-      - name: average_order_value
-        expr: order_total
-        agg: average
-        agg_time_dimension: ds
-      - name: order_cost
-        agg: sum
-        agg_time_dimension: ds
+        expr: customer_id
       - name: locations_with_orders
+        description: Distinct count of locations with order
         expr: location_id
         agg: count_distinct
-        agg_time_dimension: ds
-        create_metric: true
-      - name: median_order_valie
-        expr: order_total
-        agg: median
-        create_metric: true
-        agg_time_dimension: ds
+      - name: order_cost
+        description: The cost for each order item. Cost is calculated as a sum of the supply cost for each order item.
+        agg: sum
       - name: order_value_p99
         expr: order_total
         agg: percentile
@@ -69,8 +55,6 @@ semantic_models:
           percentile: 0.99
           use_discrete_percentile: True
           use_approximate_percentile: False
-        create_metric: true
-        agg_time_dimension: ds
       - name: discrete_order_value_p99
         expr: order_total
         agg: percentile
@@ -78,21 +62,13 @@ semantic_models:
           percentile: 0.99
           use_discrete_percentile: true
           use_approximate_percentile: false
-        create_metric: true
-        agg_time_dimension: ds
-  #Dimensions. Either categorical or time. These add additonal context to metrics. The typical querying pattern is Metric by Dimension.
-    dimensions:
-      - name: location_name
-        type: categorical
-      - name: ds
-        expr: ordered_at
-        type: time
-        type_params:
-          time_granularity: day
-      - name: is_food_order
-        type: categorical
-      - name: is_drink_order
-        type: categorical
-      - name: order_total_dim
-        type: categorical
+      - name: food_orders
+        expr: case when is_food_order then order_total else 0 end
+        agg: sum
+      - name: max_order_value
         expr: order_total
+        agg: max
+        agg_time_dimension: ordered_at
+      - name: min_order_value
+        expr: order_total
+        agg: min
