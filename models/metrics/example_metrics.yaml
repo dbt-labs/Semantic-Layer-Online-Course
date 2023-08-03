@@ -44,12 +44,6 @@ metrics:
     type: simple
     type_params:
       measure: food_orders
-  - name: "order_count"
-    label: "order_count"    
-    description: "The number of orders placeds"
-    type: simple
-    type_params:
-      measure: order_count
   - name: "max_order_amount"
     label: "max_order_amount"    
     description: "The highest order value for a given period"
@@ -93,17 +87,7 @@ metrics:
       denominator: order_total
 
 #Derived Metrics      
-  - name: "order_gross_profit"  
-    description: "Gross profit from each order."
-    type: derived
-    label: "order_gross_profit"
-    type_params:
-      expr: revenue - cost
-      metrics:
-        - name: food_order_amount
-          alias: revenue
-        - name: order_amount
-          alias: cost
+
   - name: "food_order_pct_cumulative"
     label: "food_order_as_percent_of_total_order_amount"    
     description: "Food order total as a % of total order amount"
