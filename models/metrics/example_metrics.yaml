@@ -96,7 +96,7 @@ metrics:
   - name: "order_gross_profit"  
     description: "Gross profit from each order."
     type: derived
-    label: "test"
+    label: "order_gross_profit"
     type_params:
       expr: revenue - cost
       metrics:
@@ -105,7 +105,7 @@ metrics:
         - name: order_amount
           alias: cost
   - name: "food_order_pct_cumulative"
-    label: "test"    
+    label: "food_order_as_percent_of_total_order_amount"    
     description: "Food order total as a % of total order amount"
     type: derived
     type_params:
@@ -113,7 +113,7 @@ metrics:
       metrics:
         - name: "food_order_pct"
   - name: "food_order_gross_profit"
-    label: "test"    
+    label: "food_order_gross_profit"    
     description: "The gross profit for each food order"
     type: derived
     type_params:
