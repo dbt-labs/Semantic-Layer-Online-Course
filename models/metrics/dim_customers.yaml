@@ -36,3 +36,25 @@ semantic_models:
         expr: customer_id
         agg: count_distinct
 
+metrics: 
+# Simple type metrics
+  - name: "customers"
+    description: "Count of customers"
+    type: simple
+    label: "customers"
+    type_params:
+      measure: customers
+  - name: "customers_with_orders"
+    label: "customers_with_orders"
+    description: "Unique count of customers placing orders"
+    type: simple
+    type_params:
+      measure: customers
+  - name: new_customer
+    description: Unique count of new customers.
+    label: New Customers
+    type: simple
+    type_params:
+      measure: customers_with_orders
+    filter: |
+      {{ Dimension('customer__customer_type') }}  = 'new'
