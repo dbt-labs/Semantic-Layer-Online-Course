@@ -29,9 +29,6 @@ semantic_models:
         description: Distinct count of customers placing orders
         agg: count_distinct
         expr: customer_id
-      - name: order_cost
-        description: The cost for each order item. Cost is calculated as a sum of the supply cost for each order item.
-        agg: sum
       - name: order_value_p99
         expr: amount
         agg: percentile
@@ -63,19 +60,12 @@ metrics:
     label: "order_total"
     type_params:
       measure: order_total
-
-  - name: "order_value_p99"
-    description: "The 99th percentile of each order"
+  - name: "order_count"
+    description: "number of orders" 
     type: simple
-    label: "order_value_p99"
+    label: 'order_count'
     type_params:
-      measure: order_value_p99
-  - name: "discrete_order_value_p99"
-    description: "The 99th percentile of each order using a discrete distribution"
-    type: simple
-    label: "discrete_order_value_p99"
-    type_params:
-      measure: order_value_p99
+        measure: order_count
   - name: large_order
     description: "Count of orders with order total over 20."
     type: simple
@@ -111,12 +101,6 @@ metrics:
       measure: customers_with_orders
     filter: |
       {{ Dimension('customer__customer_type') }}  = 'new'
-  - name: "order_amount"
-    label: "order_amount"    
-    description: The cost of fulfilling each order
-    type: simple
-    type_params:
-      measure: order_cost
 
 #Ratio type metric
   - name: "order_amount_pct"
@@ -149,3 +133,15 @@ metrics:
     type_params:
       measure: order_total
       grain_to_date: month
+ # DERIVED METRICS
+  - name: "orders_per_customer"
+    label: "orders_per_customer"    
+    description: "number of orders per customer"
+    type: derived
+    type_params:
+      expr: order_count/customer_count
+      metrics:
+        - name: customers
+          alias: customer_count
+        - name: order_count
+     
