@@ -1,9 +1,9 @@
 semantic_models:
-  - name: customers
+  - name: dim_customers
     defaults:
-      agg_time_dimension: first_ordered_at
+      agg_time_dimension: most_recent_order_date
     description: |
-      Customer grain mart.
+      semantic model for dim_customers
     model: ref('dim_customers')
     entities:
       - name: customer
@@ -14,11 +14,11 @@ semantic_models:
         type: categorical
       - name: customer_type
         type: categorical
-      - name: first_ordered_at
+      - name: first_order_date
         type: time
         type_params:
           time_granularity: day
-      - name: last_ordered_at
+      - name: most_recent_order_date
         type: time
         type_params:
           time_granularity: day
@@ -26,9 +26,7 @@ semantic_models:
       - name: count_lifetime_orders
         description: Total count of orders per customer.
         agg: sum
-      - name: lifetime_spend_pretax
-        description: Customer lifetime spend before taxes.
-        agg: sum
+
       - name: lifetime_spend
         agg: sum
         description: Gross customer lifetime spend inclusive of taxes.
@@ -50,4 +48,3 @@ metrics:
     type: simple
     type_params:
       measure: customers
-
