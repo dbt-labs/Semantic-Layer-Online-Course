@@ -1,9 +1,8 @@
-
 with
 
 source as (
 
-    select * from {{ ref('raw_items') }}
+    select * from {{ source('jaffle_shop', 'customers') }}
 
 ),
 
@@ -12,11 +11,11 @@ renamed as (
     select
 
         ----------  ids
-        id as order_item_id,
-        order_id,
+        id as customer_id,
 
         ---------- properties
-        sku as product_id
+        first_name,
+        last_name
 
     from source
 

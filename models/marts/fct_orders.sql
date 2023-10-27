@@ -1,46 +1,30 @@
-with 
-
-orders as (
-    
-    select * from {{ ref('stg_orders')}}
-
+with orders as  (
+    select * from {{ ref('stg_orders' )}}
 ),
 
-order_items as (
-    
-    select * from {{ ref('order_items')}}
-
+payments as (
+    select * from {{ ref('stg_payments') }}
 ),
 
-order_items_summary as (
-
+order_payments as (
     select
+        order_id,
+        sum(case when status = 'success' then amount end) as amount
 
-        order_items.order_id,
-
-        sum(supply_cost) as order_cost,
-        sum(is_food_item) as count_food_items,
-        sum(is_drink_item) as count_drink_items
-
-
-    from order_items
-
+    from payments
     group by 1
-
 ),
 
+final as (
 
-compute_booleans as (
     select
-
-        orders.*,
-        count_food_items > 0 as is_food_order,
-        count_drink_items > 0 as is_drink_order,
-        order_cost
+        orders.order_id,
+        orders.customer_id,
+        orders.order_date,
+        coalesce(order_payments.amount, 0) as amount
 
     from orders
-    
-    left join order_items_summary on orders.order_id = order_items_summary.order_id
+    left join order_payments using (order_id)
 )
 
-select * from compute_booleans
+select * from final
