@@ -1,5 +1,5 @@
 semantic_models:
-  - name: order_item
+  - name: order_items
     defaults:
       agg_time_dimension: ordered_at
     description: |

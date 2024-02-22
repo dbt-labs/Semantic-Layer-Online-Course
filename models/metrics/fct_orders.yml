@@ -1,5 +1,5 @@
 semantic_models:
-  - name: orders
+  - name: fct_orders
     defaults:
       agg_time_dimension: ordered_at
     description: |
