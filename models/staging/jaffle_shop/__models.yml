@@ -10,15 +10,6 @@ models:
           - not_null
           - unique
 
-  - name: stg_locations
-    description: List of open locations with basic cleaning and transformation applied, one row per location.
-    columns:
-      - name: location_id
-        description: The unique key for each location.
-        tests:
-          - not_null
-          - unique
-
   - name: stg_order_items
     description: Individual food and drink items that make up our orders, one row per item.
     columns:
