@@ -194,3 +194,23 @@ metrics:
     type_params:
       measure: order_total
       grain_to_date: month
+saved_queries:
+ - name: order_metrics
+   description: Relevant order metrics
+   query_params:
+     metrics:
+       - large_order
+       - food_order_amount
+       - order_total
+     group_by:
+       - Entity('order_id')
+       - TimeDimension('ordered_at', 'day')
+       - Dimension('dim_customers__customer_name')
+     where:
+       - "{{TimeDimension('ordered_at')}} > current_timestamp - interval '1 week'"
+   exports:
+    - name: order_metrics
+      config:
+        export_as: table # Options available: table, view
+        schema: YOUR_SCHEMA # Optional - defaults to deployment schema
+        alias: SOME_TABLE_NAME # Optional - defaults to Export name
