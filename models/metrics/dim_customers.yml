@@ -10,7 +10,7 @@ semantic_models:
         expr: customer_id
         type: primary
     dimensions:
-      - name: customer_name
+      - name: name
         type: categorical
       - name: customer_type
         type: categorical
