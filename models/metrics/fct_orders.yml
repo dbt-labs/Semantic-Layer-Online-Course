@@ -158,21 +158,21 @@ metrics:
       expr: food_order_pct * 100
       metrics:
         - name: "food_order_pct"
-  - name: "food_order_gross_profit"
-    label: "food_order_gross_profit"    
-    description: "The gross profit for each food order"
-    type: derived
-    type_params:
-      expr: revenue - cost
-      metrics:
-        - name: order_total
-          alias: revenue
-          filter: |
-            {{Dimension('product__is_food_order')}} = True
-        - name: order_amount
-          alias: cost
-          filter: |
-            {{Dimension('product__is_food_order')}} = True
+  # - name: "food_order_gross_profit"
+  #   label: "food_order_gross_profit"    
+  #   description: "The gross profit for each food order"
+  #   type: derived
+  #   type_params:
+  #     expr: revenue - cost
+  #     metrics:
+  #       - name: order_total
+  #         alias: revenue
+  #         filter: |
+  #           {{Dimension('product__is_food_order')}} = True
+  #       - name: order_amount
+  #         alias: cost
+  #         filter: |
+  #           {{Dimension('product__is_food_order')}} = True
  #CUMULATIVE METRICS 
   - name: "cumulative_order_amount"
     label: "cumulative_order_amount"    
