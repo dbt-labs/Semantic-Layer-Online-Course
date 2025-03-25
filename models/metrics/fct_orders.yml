@@ -52,15 +52,15 @@ semantic_models:
         agg: percentile
         agg_params:
           percentile: 0.99
-          use_discrete_percentile: True
-          use_approximate_percentile: False
+          use_discrete_percentile: false
+          use_approximate_percentile: true
       - name: discrete_order_value_p99
         expr: order_total
         agg: percentile
         agg_params:
           percentile: 0.99
-          use_discrete_percentile: true
-          use_approximate_percentile: false
+          use_discrete_percentile: false
+          use_approximate_percentile: true
       - name: food_orders
         expr: case when is_food_order then order_total else 0 end
         agg: sum
