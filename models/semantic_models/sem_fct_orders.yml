@@ -1,0 +1,48 @@
+semantic_models:
+- name: orders
+  description: Order overview data mart, offering key details for each order including
+    if it's a customer's first order and a food vs. drink item breakdown. One row
+    per order.
+  model: ref('fct_orders')
+  defaults:
+    agg_time_dimension: ordered_at
+  entities:
+  - name: order
+    type: primary
+    expr: order_id
+  - name: customer
+    type: foreign
+    expr: customer_id
+  - name: location
+    type: foreign
+    expr: location_id
+  dimensions:
+  - name: ordered_at
+    type: time
+    type_params:
+      time_granularity: day
+  - name: is_food_order
+    type: categorical
+  - name: is_drink_order
+    type: categorical
+  measures:
+  - name: order_total
+    description: The total amount of the order in USD including tax.
+    agg: sum
+    create_metric: true
+  - name: tax_paid
+    description: The total tax paid for the order.
+    agg: sum
+    create_metric: true
+  - name: order_cost
+    description: The sum of supply expenses to fulfill the order.
+    agg: sum
+    create_metric: true
+  - name: count_order
+    agg: count
+    create_metric: true
+    expr: order_id
+  - name: count_location
+    agg: count_distinct
+    create_metric: true
+    expr: location_id

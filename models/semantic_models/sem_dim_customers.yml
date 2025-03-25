@@ -1,0 +1,49 @@
+semantic_models:
+- name: customers
+  description: Customer overview data mart, offering key details for each unique customer.
+    One row per customer.
+  model: ref('dim_customers')
+  defaults:
+    agg_time_dimension: first_ordered_at
+  entities:
+  - name: customer
+    type: primary
+    expr: customer_id
+  dimensions:
+  - name: name
+    description: Customers' full name.
+    type: categorical
+  - name: first_ordered_at
+    description: The timestamp when a customer placed their first order.
+    type: time
+    type_params:
+      time_granularity: day
+  - name: last_ordered_at
+    description: The timestamp of a customer's most recent order.
+    type: time
+    type_params:
+      time_granularity: day
+  - name: type
+    description: Options are 'new' or 'returning', indicating if a customer has ordered
+      more than once or has only placed their first order to date.
+    expr: customer_type
+    type: categorical
+  measures:
+  - name: count_lifetime_orders
+    description: Total number of orders a customer has ever placed.
+    agg: sum
+    create_metric: true
+  - name: lifetime_spend_pretax
+    description: The sum of all the pre-tax subtotals of every order a customer has
+      placed.
+    agg: sum
+    create_metric: true
+  - name: lifetime_spend
+    description: The sum of all the order totals (including tax) that a customer has
+      ever placed.
+    agg: sum
+    create_metric: true
+  - name: count_customer
+    agg: count
+    create_metric: true
+    expr: customer_id
