@@ -9,7 +9,7 @@ semantic_models:
   - name: order_item
     type: primary
     expr: order_item_id
-  - name: order
+  - name: customer_order
     type: foreign
     expr: order_id
   - name: product

@@ -7,7 +7,7 @@ semantic_models:
   defaults:
     agg_time_dimension: ordered_at
   entities:
-  - name: order
+  - name: customer_order
     type: primary
     expr: order_id
   - name: customer
