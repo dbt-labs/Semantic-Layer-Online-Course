@@ -194,3 +194,18 @@ metrics:
     type_params:
       measure: order_total
       grain_to_date: month
+saved_queries:
+  - name: order_metrics
+    description: testing out order metrics in one table 
+    query_params:
+      metrics:
+        - cumulative_order_amount
+        - min_order_amount
+        - max_order_amount
+      group_by:
+        - TimeDimension('metric_time', 'day')
+    exports:
+      - name: order_metrics
+        config:
+          export_as: table
+          schema: faith_tests_exports
