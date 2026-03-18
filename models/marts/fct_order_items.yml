@@ -1,0 +1,59 @@
+models:
+  - name: fct_order_items
+    semantic_model:
+      enabled: true
+    agg_time_dimension: ordered_at
+    description: |
+      Items contatined in each order. The grain of the table is one row per order item.
+    columns: 
+      ## entities
+      - name: order_item_id
+        entity:
+          type: primary
+      - name: order_id
+        entity:
+          type: foreign
+      - name: product_id
+        entity:
+          type: foreign
+
+      ## dimensions
+      - name: ordered_at
+        dimension:
+          type: time
+        granularity: day
+      - name: is_food_item
+        dimension:
+          type: categorical
+      - name: is_drink_item
+        dimension:
+          type: categorical
+          
+    ## simple metrics
+    metrics:
+      - name: product_price
+        description: The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.
+        agg: sum
+      - name: supply_cost
+        description: The cost generated for each order item.
+        agg: sum
+      - name: food_revenue
+        description: The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.
+        agg: sum
+        expr: case when is_food_item = 1 then product_price else 0 end
+      - name: drink_revenue
+        description: The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.
+        agg: sum
+        expr: case when is_drink_item = 1 then product_price else 0 end
+
+## advanced metrics
+metrics:
+  ## derived metrics
+  - name: gross_profit  
+    description: "The gross profit for each order"
+    type: derived
+    expr: product_price - supply_cost
+    input_metrics:
+      - name: product_price
+      - name: supply_cost
+

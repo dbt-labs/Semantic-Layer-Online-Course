@@ -1,0 +1,46 @@
+models:
+  - name: dim_customers
+    semantic_model:
+      enabled: true
+    agg_time_dimension: first_ordered_at
+    description: |
+      Customer grain mart.
+    
+    columns: 
+      ## entities
+      - name: customer_id
+        entity:
+          type: primary
+
+      ## dimensions
+      - name: customer_name
+        dimension:
+          type: categorical
+      - name: customer_type
+        dimension:
+          type: categorical
+      - name: first_ordered_at
+        dimension:
+          type: time
+        granularity: day
+      - name: last_ordered_at
+        dimension:
+          type: time
+        granularity: day
+    ## simple metrics
+    metrics:
+      - name: count_lifetime_orders
+        description: Total count of orders per customer.
+        agg: sum
+      - name: lifetime_spend_pretax
+        description: Customer lifetime spend before taxes.
+        agg: sum
+      - name: lifetime_spend
+        agg: sum
+        description: Gross customer lifetime spend inclusive of taxes.
+      - name: customers
+        expr: customer_id
+        agg: count_distinct
+## no advanced metrics
+## metrics:
+  
