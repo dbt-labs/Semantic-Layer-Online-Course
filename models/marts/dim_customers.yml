@@ -11,6 +11,7 @@ models:
       - name: customer_id
         entity:
           type: primary
+          name: customer_id
 
       ## dimensions
       - name: customer_name

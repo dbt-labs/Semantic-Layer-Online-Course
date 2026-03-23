@@ -10,12 +10,15 @@ models:
       - name: order_item_id
         entity:
           type: primary
+          name: order_item_id
       - name: order_id
         entity:
           type: foreign
+          name: order_id
       - name: product_id
         entity:
           type: foreign
+          name: product_id
 
       ## dimensions
       - name: ordered_at

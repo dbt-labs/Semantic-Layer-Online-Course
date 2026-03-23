@@ -1,0 +1,9 @@
+models: 
+# Hourly time spine
+  - name: metricflow_time_spine 
+    description: my favorite time spine
+    time_spine:
+      standard_granularity_column: date_daytime # column for the standard grain of your table, must be date time type.
+    columns:
+      - name: date_daytime
+        granularity: hour # set granularity at column-level for standard_granularity_column

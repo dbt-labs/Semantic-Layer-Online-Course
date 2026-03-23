@@ -10,12 +10,15 @@ models:
       - name: order_id
         entity:
           type: primary
+          name: order_id
       - name: location_id
         entity:
           type: foreign
+          name: location_id
       - name: customer_id
         entity:
           type: foreign
+          name: customer_id
 
       ## dimensions
       - name: ordered_at
@@ -60,7 +63,7 @@ models:
         agg: percentile
         percentile: 0.99
         percentile_type: discrete
-      - name: food_orders
+      - name: food_order_amount
         expr: case when is_food_order then order_total else 0 end
         agg: sum
       - name: max_order_value
@@ -70,24 +73,24 @@ models:
       - name: min_order_value
         expr: order_total
         agg: min
+      - name: large_order
+        description: "Count of orders with order total over 20."
+        type: simple
+        agg: sum
+        label: "Large Orders"
+        expr: 1
+        filter: |
+          {{ Dimension('order_id__order_total') }} >= 20
+      - name: new_customer
+        description: Unique count of new customers.
+        label: New Customers
+        type: simple
+        agg: count_distinct
+        expr: customer_id
+        filter: |
+          {{ Dimension('customer_id__customer_type') }}  = 'new'
 
 metrics: ## advanced metrics
-  - name: large_order
-    description: "Count of orders with order total over 20."
-    type: simple
-    label: "Large Orders"
-    input_metrics:
-      - name: order_count
-    filter: |
-      {{ Dimension('order_id__order_total_dim') }} >= 20
-  - name: new_customer
-    description: Unique count of new customers.
-    label: New Customers
-    type: simple
-    input_metrics:
-      - name: customers_with_orders
-    filter: |
-      {{ Dimension('customer__customer_type') }}  = 'new'
 
 #Ratio type metric
   - name: "food_order_pct"
@@ -99,12 +102,6 @@ metrics: ## advanced metrics
 
 #Derived Metrics      
 
-  - name: "food_order_pct_cumulative"
-    label: "food_order_as_percent_of_total_order_amount"    
-    description: "Food order total as a % of total order amount"
-    type: derived
-    input_metrics:
-      - name: "food_order_pct"
   - name: "food_order_gross_profit"
     label: "food_order_gross_profit"    
     description: "The gross profit for each food order"
@@ -113,30 +110,28 @@ metrics: ## advanced metrics
     input_metrics:
       - name: order_total
         filter: |
-          {{Dimension('product__is_food_order')}} = True
+          {{Dimension('order_id__is_food_order')}} = True
       - name: order_cost
         filter: |
-          {{Dimension('product__is_food_order')}} = True
+          {{Dimension('order_id__is_food_order')}} = True
  #CUMULATIVE METRICS 
   - name: "cumulative_order_amount"
     label: "cumulative_order_amount"    
     description: "The cumulative value of all orders"
     type: cumulative
-    input_metrics:
-      - name: order_total
+    input_metric: order_total
+    
   - name: "cumulative_order_ammount_l1m"
     label: "cumulative_order_ammount_l1m"    
     description: "Trailing 1 month cumulative order amount"
     type: cumulative
-    input_metrics:
-      - name: order_total
+    input_metric: order_total
     window: 1 month
   - name: "cumulative_order_amount_mtd"
     label: "cumulative_order_amount_mtd"    
     description: "The month to date value of all orders"
     type: cumulative
-    input_metrics:
-      - name: order_total
+    input_metric: order_total
     grain_to_date: month
 saved_queries:
   - name: order_metrics

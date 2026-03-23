@@ -9,7 +9,8 @@ with days as (
 ),
 
 final as (
-    select cast(date_day as date) as date_day
+    select cast(date_day as date) as date_day,
+        cast(date_day as datetime) as date_daytime
     from days
 )
 
