@@ -31,6 +31,9 @@ models:
       - name: is_food_order
         dimension:
           type: categorical
+      - name: is_drink_order
+        dimension:
+          type: categorical
 
     metrics: ## simple metrics
       - name: order_total

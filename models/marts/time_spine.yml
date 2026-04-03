@@ -1,6 +1,6 @@
 models: 
 # Hourly time spine
-  - name: metricflow_time_spine 
+  - name: time_spine_daily 
     description: my favorite time spine
     time_spine:
       standard_granularity_column: date_daytime # column for the standard grain of your table, must be date time type.
