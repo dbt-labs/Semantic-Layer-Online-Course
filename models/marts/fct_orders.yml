@@ -25,7 +25,7 @@ models:
         dimension:
           type: time
         granularity: day
-      - name: order_total
+      - name: order_total ## this is a dimension because we intend to filter by it later
         dimension:
           type: categorical
       - name: is_food_order
