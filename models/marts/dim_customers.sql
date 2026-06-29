@@ -14,7 +14,7 @@ orders as (
 
 order_items as (
 
-    select * from {{ ref('order_items') }}
+    select * from {{ ref('fct_order_items') }}
 ),
 
 order_summary as (
@@ -40,7 +40,8 @@ order_summary as (
 joined as (
 
     select
-        customers.*,
+        customers.customer_id,
+        customers.name as customer_name,
         order_summary.count_lifetime_orders,
         order_summary.first_ordered_at,
         order_summary.last_ordered_at,
