@@ -104,7 +104,7 @@ metrics: ## advanced metrics
     denominator: order_total
 
 #Derived Metrics      
-    - name: "order_gross_profit"
+  - name: "order_gross_profit"
     label: "order_gross_profit"    
     description: "The gross profit for each order"
     type: derived
