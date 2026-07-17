@@ -3,10 +3,10 @@ version: 2
 sources:
   - name: jaffle_shop
     database: raw
-    schema: new_jaffle_shop
+    schema: jaffle_shop
     tables:
-      - name: customers
-      - name: orders
-      - name: items
-      - name: products
-      - name: supplies 
+      - name: raw_customers
+      - name: raw_orders
+      - name: raw_items
+      - name: raw_products
+      - name: raw_supplies 
