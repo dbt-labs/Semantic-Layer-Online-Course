@@ -5,6 +5,13 @@ models:
     agg_time_dimension: ordered_at
     description: |
       Order fact table. This table is at the order grain with one row per order.
+
+    # an entity that isn't a direct name
+    derived_semantics:
+      entities:
+        - expr: right(order_id, 5)
+          name: order_label
+          type: foreign
     columns:
       ## entities
       - name: order_id
@@ -19,7 +26,7 @@ models:
         entity:
           type: foreign
           name: customer_id
-
+    
       ## dimensions
       - name: ordered_at
         dimension:
