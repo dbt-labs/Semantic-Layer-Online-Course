@@ -154,7 +154,7 @@ saved_queries:
       group_by:
         - Entity('order_id')
         - TimeDimension('order_id__ordered_at', 'day')
-        - Dimension('customer__customer_name')
+        - Dimension('customer_id__customer_name')
     exports:
       - name: order_metrics
         config:
