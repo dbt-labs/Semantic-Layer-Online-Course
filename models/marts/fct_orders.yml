@@ -17,7 +17,7 @@ models:
       - name: order_id
         entity:
           type: primary
-          name: order_id
+          name: order_id # optional, can choose a name for the entity or it will default to column name
       - name: location_id
         entity:
           type: foreign
@@ -38,6 +38,7 @@ models:
       - name: is_food_order
         dimension:
           type: categorical
+          expr: case when is_food_order = true then 1 else 0
       - name: is_drink_order
         dimension:
           type: categorical
