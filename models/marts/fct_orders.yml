@@ -12,6 +12,10 @@ models:
         - expr: right(order_id, 5)
           name: order_label
           type: foreign
+      dimensions:
+        - expr: case when is_food_order = true then 1 else 0
+          name: is_food_order
+          type: categorical
     columns:
       ## entities
       - name: order_id
@@ -35,10 +39,6 @@ models:
       - name: order_total ## this is a dimension because we intend to filter by it later
         dimension:
           type: categorical
-      - name: is_food_order
-        dimension:
-          type: categorical
-          expr: case when is_food_order = true then 1 else 0
       - name: is_drink_order
         dimension:
           type: categorical
