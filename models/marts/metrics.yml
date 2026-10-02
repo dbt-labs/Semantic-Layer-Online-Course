@@ -1,0 +1,25 @@
+metrics:
+  - name: average_items_per_order
+    label: Average Items per Order
+    description: Average number of order items per order, combining item-grain and order-grain metrics.
+    type: ratio
+    numerator: order_item_count
+    denominator: order_count
+
+  - name: customer_order_rate
+    label: Customer Order Rate
+    description: Share of all customers who have placed at least one order. Best interpreted without a time grain because customers are timed by first order date.
+    type: ratio
+    numerator: customers_with_orders
+    denominator: customers
+
+  - name: order_total_reconciliation_gap
+    label: Order Total Reconciliation Gap
+    description: Difference between order totals and item revenue plus tax. A value of zero indicates that the order- and item-grain metrics reconcile.
+    type: derived
+    expr: order_total - item_revenue - tax_paid
+    input_metrics:
+      - name: order_total
+      - name: product_price
+        alias: item_revenue
+      - name: tax_paid

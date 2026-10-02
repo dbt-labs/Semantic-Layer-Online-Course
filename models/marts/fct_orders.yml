@@ -5,12 +5,23 @@ models:
     agg_time_dimension: ordered_at
     description: |
       Order fact table. This table is at the order grain with one row per order.
+
+    # an entity that isn't a direct name
+    derived_semantics:
+      entities:
+        - expr: right(order_id, 5)
+          name: order_label
+          type: foreign
+      dimensions:
+        - expr: case when is_food_order = true then 1 else 0 end
+          name: is_food_order
+          type: categorical
     columns:
       ## entities
       - name: order_id
         entity:
           type: primary
-          name: order_id
+          name: order_id # optional, can choose a name for the entity or it will default to column name
       - name: location_id
         entity:
           type: foreign
@@ -19,16 +30,13 @@ models:
         entity:
           type: foreign
           name: customer_id
-
+    
       ## dimensions
       - name: ordered_at
         dimension:
           type: time
         granularity: day
       - name: order_total ## this is a dimension because we intend to filter by it later
-        dimension:
-          type: categorical
-      - name: is_food_order
         dimension:
           type: categorical
       - name: is_drink_order
@@ -92,50 +100,49 @@ models:
         expr: customer_id
         filter: |
           {{ Dimension('customer_id__customer_type') }}  = 'new'
+      #Ratio type metric
+      - name: "food_order_pct"
+        description: "The food cost as the % of the total order"
+        label: "food_order_pct"    
+        type: ratio
+        numerator: food_order_amount
+        denominator: order_total
+      #Derived Metrics      
 
-metrics: ## advanced metrics
+      - name: "food_order_gross_profit"
+        label: "food_order_gross_profit"    
+        description: "The gross profit for each food order"
+        type: derived
+        expr: order_total - order_cost
+        input_metrics:
+          - name: order_total
+            filter: |
+              {{Dimension('order_id__is_food_order')}} = True
+          - name: order_cost
+            filter: |
+              {{Dimension('order_id__is_food_order')}} = True
+      - name: "cumulative_order_amount"
+        label: "cumulative_order_amount"    
+        description: "The cumulative value of all orders"
+        type: cumulative
+        input_metric: order_total
+        
+      - name: "cumulative_order_ammount_l1m"
+        label: "cumulative_order_ammount_l1m"    
+        description: "Trailing 1 month cumulative order amount"
+        type: cumulative
+        input_metric: order_total
+        window: 1 month
+      - name: "cumulative_order_amount_mtd"
+        label: "cumulative_order_amount_mtd"    
+        description: "The month to date value of all orders"
+        type: cumulative
+        input_metric: order_total
+        grain_to_date: month
 
-#Ratio type metric
-  - name: "food_order_pct"
-    description: "The food cost as the % of the total order"
-    label: "food_order_pct"    
-    type: ratio
-    numerator: food_order_amount
-    denominator: order_total
 
-#Derived Metrics      
-
-  - name: "food_order_gross_profit"
-    label: "food_order_gross_profit"    
-    description: "The gross profit for each food order"
-    type: derived
-    expr: order_total - order_cost
-    input_metrics:
-      - name: order_total
-        filter: |
-          {{Dimension('order_id__is_food_order')}} = True
-      - name: order_cost
-        filter: |
-          {{Dimension('order_id__is_food_order')}} = True
  #CUMULATIVE METRICS 
-  - name: "cumulative_order_amount"
-    label: "cumulative_order_amount"    
-    description: "The cumulative value of all orders"
-    type: cumulative
-    input_metric: order_total
-    
-  - name: "cumulative_order_ammount_l1m"
-    label: "cumulative_order_ammount_l1m"    
-    description: "Trailing 1 month cumulative order amount"
-    type: cumulative
-    input_metric: order_total
-    window: 1 month
-  - name: "cumulative_order_amount_mtd"
-    label: "cumulative_order_amount_mtd"    
-    description: "The month to date value of all orders"
-    type: cumulative
-    input_metric: order_total
-    grain_to_date: month
+
 saved_queries:
   - name: order_metrics
     description: testing out order metrics in one table 
