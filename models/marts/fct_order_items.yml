@@ -40,6 +40,12 @@ models:
       - name: supply_cost
         description: The cost generated for each order item.
         agg: sum
+      - name: order_item_count
+        label: Order Item Count
+        description: Total number of items included in orders.
+        type: simple
+        expr: 1
+        agg: sum
       - name: food_revenue
         description: The revenue generated for each order item. Revenue is calculated as a sum of revenue associated with each product in an order.
         agg: sum
