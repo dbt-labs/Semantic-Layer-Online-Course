@@ -43,5 +43,5 @@ models:
         expr: customer_id
         agg: count_distinct
 ## no advanced metrics
-## metrics:
+
   
