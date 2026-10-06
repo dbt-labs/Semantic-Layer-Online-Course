@@ -33,6 +33,7 @@ vars:
 
 models:
   jaffle_shop:
+    +static_analysis: strict
     staging:
       +materialized: view
     marts:
