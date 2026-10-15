@@ -124,8 +124,8 @@ metrics: ## advanced metrics
     type: cumulative
     input_metric: order_total
     
-  - name: "cumulative_order_ammount_l1m"
-    label: "cumulative_order_ammount_l1m"    
+  - name: "cumulative_order_amount_l1m"
+    label: "cumulative_order_amount_l1m"    
     description: "Trailing 1 month cumulative order amount"
     type: cumulative
     input_metric: order_total
