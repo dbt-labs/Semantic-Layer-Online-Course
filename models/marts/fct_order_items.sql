@@ -37,12 +37,14 @@ order_supplies_summary as (
 
 joined as (
     select
-        order_items.*,
+        order_items.order_item_id, 
+        order_items.order_id, 
+        order_items.product_id,
         products.product_price,
         order_supplies_summary.supply_cost,
         products.is_food_item,
         products.is_drink_item,
-        orders.ordered_at as ordered_at_dt
+        orders.ordered_at
 
     from order_items
 
