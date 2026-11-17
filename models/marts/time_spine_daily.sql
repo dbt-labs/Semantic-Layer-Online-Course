@@ -24,5 +24,5 @@ final as (
 
 select *
 from final
-where date_day > dateadd(year, -5, current_date())  -- Keep recent dates only
-  and date_day < dateadd(day, 30, current_date())
+-- Retain historical dates so cumulative metrics can join to older orders.
+where date_day < dateadd(day, 30, current_date())

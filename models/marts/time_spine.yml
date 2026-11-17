@@ -1,6 +1,7 @@
 models:
   - name: time_spine_daily
-    description: A time spine with one row per day, ranging from 5 years in the past to 30 days into the future.
+    description: A daily time spine from 2000-01-01 through 29 days after the build date, capped at 2029-12-31.
+
     time_spine:
       standard_granularity_column: date_day  # The base column used for time joins
     columns:
